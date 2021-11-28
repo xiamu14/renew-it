@@ -1,21 +1,19 @@
 {
   "name": "renew-it",
   "version": "1.4.0",
-  "description": "Auto bump version (use semver), push commit and tag, publish to npm.",
+  "description": "auto bump version (use semver), push commit and tag",
   "main": "run.js",
   "bin": {
     "renew-it": "cli.js"
   },
   "scripts": {
-    "test": "mocha",
     "patch": "renew-it --patch",
     "minor": "renew-it --minor",
-    "major": "renew-it --major",
-    "lint": "uslint cli.js semver.js test"
+    "major": "renew-it --major"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/PengJiyuan/release.git"
+    "url": "https://github.com/xiamu14/renew-it.git"
   },
   "keywords": [
     "npm",
@@ -29,14 +27,5 @@
     "chalk": "^2.4.1",
     "commander": "^2.15.1",
     "semver": "^5.5.0"
-  },
-  "devDependencies": {
-    "mocha": "^5.2.0",
-    "pre-commit": "^1.2.2",
-    "uslint": "^0.3.4"
-  },
-  "precommit": [
-    "test",
-    "lint"
-  ]
+  }
 }
