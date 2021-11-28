@@ -1,10 +1,11 @@
-[![Travis](https://img.shields.io/travis/PengJiyuan/relix.svg)](https://travis-ci.org/PengJiyuan/relix)
-[![npm](https://img.shields.io/npm/v/relix.svg)](https://www.npmjs.com/package/relix)
-[![npm](https://img.shields.io/npm/l/relix.svg)](https://www.npmjs.com/package/relix)
+[![Travis](https://img.shields.io/travis/PengJiyuan/renew-it.svg)](https://travis-ci.org/PengJiyuan/renew-it)
+[![npm](https://img.shields.io/npm/v/renew-it.svg)](https://www.npmjs.com/package/renew-it)
+[![npm](https://img.shields.io/npm/l/renew-it.svg)](https://www.npmjs.com/package/renew-it)
 
 ![Logo](./.github/logo.png)
 
-# Relix
+# renew-it
+
 A tool help you push release to NPM.
 
 It auto generate version (use [SemVer](https://semver.org/)), push commit and tag, publish to npm.
@@ -19,47 +20,47 @@ It auto generate version (use [SemVer](https://semver.org/)), push commit and ta
 
 When we publish a package to NPM, we need do these works:
 
-* Change version in package.json manually.
-* Git add and Commit with a message like `bump version xxx`
-* Push commit to github.
-* Git tag version.
-* Push tag to github.
-* Publish to NPM by `npm publish`.
+- Change version in package.json manually.
+- Git add and Commit with a message like `bump version xxx`
+- Push commit to github.
+- Git tag version.
+- Push tag to github.
+- Publish to NPM by `npm publish`.
 
-Oops... So annoying! That's why I create **Relix**!
+Oops... So annoying! That's why I create **renew-it**!
 
-## What can Relix help you?
+## What can renew-it help you?
 
-* Auto change release version according to [SemVer](https://semver.org/).
+- Auto change release version according to [SemVer](https://semver.org/).
 
   You don't have to spend time on changing versions. MAJOR.MINOR.PATCH.BETA, Fully automatic.
 
-* Auto add changed files and generate commit message according to **SemVer version type**.
+- Auto add changed files and generate commit message according to **SemVer version type**.
 
-  For example, you use `relix --patch`, the commit message will be `Bump version x.x.x`.
+  For example, you use `renew-it --patch`, the commit message will be `Bump version x.x.x`.
 
-  If you use `relix --prerelease alpha`, the commit message will be `Prerelease alpha version x.x.x-alpha.0`.
+  If you use `renew-it --prerelease alpha`, the commit message will be `Prerelease alpha version x.x.x-alpha.0`.
 
   Sounds great! Right?
 
-* Push commit to github and make a tag according to new version, then push it to github too.
+- Push commit to github and make a tag according to new version, then push it to github too.
 
-* Publish to NPM!
+- Publish to NPM!
 
 ## Usage
 
 ```bash
-npm i relix -g
+npm i renew-it -g
 # or
-npm i relix -D
+npm i renew-it -D
 ```
 
 ```bash
-relix -h
+renew-it -h
 ```
 
 ```
-  Usage: relix [options]
+  Usage: renew-it [options]
 
   Version format: MAJOR.MINOR.PATCH (see: https://semver.org/)
 
@@ -83,11 +84,11 @@ relix -h
 
   Examples:
 
-    $ relix --patch
-    $ relix --prepatch
-    $ relix --prepatch alpha
-    $ relix --major --accessPublic
-    $ relix --patch --remote upstream/branch
+    $ renew-it --patch
+    $ renew-it --prepatch
+    $ renew-it --prepatch alpha
+    $ renew-it --major --accessPublic
+    $ renew-it --patch --remote upstream/branch
 
 ```
 
@@ -95,19 +96,19 @@ relix -h
 
 eg: Current Version: **1.1.1**
 
-cmd: `relix [options]`
+cmd: `renew-it [options]`
 
-| Cmd                      | Version         | commit_msg     | Description |
-|--------------------------|-----------------|----------------|-------------|
-| `--patch`                | `1.1.2`         | Bump version 1.1.2 | Generate a version when<br>you make backwards-compatible bug fixes. |
-| `--minor`                | `1.2.0`         | Release minor version 1.2.0 | Generate a version when you<br>add functionality ina backwards-compatible manner. |
-| `--major`                | `2.0.0`         | Release major version 2.0.0 | Generate a version when you<br>make incompatible API changes. | 
-| `--prepatch alpha`       | `1.1.2-alpha.0` | Prerelease alpha version 1.1.2-alpha.0 | Increments the patch version,<br>then makes a prerelease. | 
-| `--preminor rc`          | `1.2.0-rc.0`    | Prerelease rc version 1.2.0-rc.0 | Increments the patch version,<br>then makes a prerelease. | 
-| `--premajor`             | `2.0.0-beta.0`  | Prerelease beta version 2.0.0-beta.0 | Increments the patch version,<br>then makes a prerelease. |
-| `--prerelease`           | `1.1.2-beta.0`  | Prerelease beta version 1.1.2-beta.0 | Increments the patch version,<br>then makes a prerelease. |
-| `--patch --accessPublic` | `1.1.2`         | Bump version 1.1.2 | `npm publish --access=public`,<br>When your npm package is under scope,use it.<br>eg: `package name: @scope/packageName` |
-| `--patch --remote upstream/mybranch` | `1.1.2`         | Bump version 1.1.2 | Specify upstream and branch |
+| Cmd                                  | Version         | commit_msg                             | Description                                                                                                              |
+| ------------------------------------ | --------------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `--patch`                            | `1.1.2`         | Bump version 1.1.2                     | Generate a version when<br>you make backwards-compatible bug fixes.                                                      |
+| `--minor`                            | `1.2.0`         | Release minor version 1.2.0            | Generate a version when you<br>add functionality ina backwards-compatible manner.                                        |
+| `--major`                            | `2.0.0`         | Release major version 2.0.0            | Generate a version when you<br>make incompatible API changes.                                                            |
+| `--prepatch alpha`                   | `1.1.2-alpha.0` | Prerelease alpha version 1.1.2-alpha.0 | Increments the patch version,<br>then makes a prerelease.                                                                |
+| `--preminor rc`                      | `1.2.0-rc.0`    | Prerelease rc version 1.2.0-rc.0       | Increments the patch version,<br>then makes a prerelease.                                                                |
+| `--premajor`                         | `2.0.0-beta.0`  | Prerelease beta version 2.0.0-beta.0   | Increments the patch version,<br>then makes a prerelease.                                                                |
+| `--prerelease`                       | `1.1.2-beta.0`  | Prerelease beta version 1.1.2-beta.0   | Increments the patch version,<br>then makes a prerelease.                                                                |
+| `--patch --accessPublic`             | `1.1.2`         | Bump version 1.1.2                     | `npm publish --access=public`,<br>When your npm package is under scope,use it.<br>eg: `package name: @scope/packageName` |
+| `--patch --remote upstream/mybranch` | `1.1.2`         | Bump version 1.1.2                     | Specify upstream and branch                                                                                              |
 
 ## LICENSE
 

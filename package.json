@@ -1,14 +1,16 @@
 {
-  "name": "relix",
-  "version": "1.3.0",
+  "name": "renew-it",
+  "version": "1.1.0",
   "description": "Auto bump version (use semver), push commit and tag, publish to npm.",
-  "main": "index.js",
-  "bin": "cli.js",
+  "main": "run.js",
+  "bin": {
+    "renew-it": "cli.js"
+  },
   "scripts": {
     "test": "mocha",
-    "patch": "relix --patch",
-    "minor": "relix --minor",
-    "major": "relix --major",
+    "patch": "renew-it --patch",
+    "minor": "renew-it --minor",
+    "major": "renew-it --major",
     "lint": "uslint cli.js semver.js test"
   },
   "repository": {
@@ -20,12 +22,9 @@
     "release",
     "semver"
   ],
-  "author": "PengJiyuan",
+  "author": "",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/PengJiyuan/release/issues"
-  },
-  "homepage": "https://github.com/PengJiyuan/release#readme",
+  "homepage": "",
   "dependencies": {
     "chalk": "^2.4.1",
     "commander": "^2.15.1",
