@@ -1,6 +1,6 @@
 {
   "name": "renew-it",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "auto bump version (use semver), push commit and tag",
   "main": "run.js",
   "bin": {
