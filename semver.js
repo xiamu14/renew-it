@@ -47,8 +47,9 @@ function getNewVersion(options, version) {
       }
       const identifier =
         typeof options[sem] === "boolean" ? "beta" : options[sem];
-      metadata.version = increase(version, sem, identifier);
-      metadata.tag = `v${metadata.version}`;
+      const version = increase(version, sem, identifier);
+      metadata.version = version;
+      metadata.tag = `v${version}`;
       metadata.prefix = `Prerelease ${identifier} version `;
     }
   });
