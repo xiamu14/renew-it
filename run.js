@@ -59,7 +59,7 @@ module.exports = async function (options) {
         `Tag and push tag to ${upstream}`
       )}\n"`,
       `git tag ${metadata.version}`,
-      `git push ${upstream} ${metadata.version} --follow-tags`,
+      `git push ${upstream} ${metadata.version}`,
     ].join(" && ");
 
     return new Promise((resolve) => {

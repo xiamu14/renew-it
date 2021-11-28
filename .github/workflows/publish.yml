@@ -18,10 +18,6 @@ jobs:
         with:
           node-version: "16.x"
           registry-url: "https://registry.npmjs.org"
-      - uses: borales/actions-yarn@v2.3.0
-        with:
-          cmd: install
-      - run: yarn build
       - run: yarn publish --access public
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}} # 跟前面步骤中的 NPM_AUTH_TOKEN 保持一致
