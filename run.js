@@ -58,8 +58,8 @@ module.exports = async function (options) {
       `echo "\n${green("[ 2 / 2 ]")} ${cyan(
         `Tag and push tag to ${upstream}`
       )}\n"`,
-      `git tag ${metadata.version}`,
-      `git push ${upstream} ${metadata.version}`,
+      `git tag ${metadata.tag}`,
+      `git push ${upstream} ${metadata.tag}`,
     ].join(" && ");
 
     return new Promise((resolve) => {
