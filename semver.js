@@ -30,9 +30,9 @@ function getNewVersion(options, version) {
         );
         process.exit(1);
       }
-      const version = increase(version, sem[0]);
-      metadata.version = version;
-      metadata.tag = `v${version}`;
+      const newVersion = increase(version, sem[0]);
+      metadata.version = newVersion;
+      metadata.tag = `v${newVersion}`;
       metadata.prefix = sem[1];
     }
   });
@@ -49,9 +49,9 @@ function getNewVersion(options, version) {
       }
       const identifier =
         typeof options[sem] === "boolean" ? "beta" : options[sem];
-      const version = increase(version, sem, identifier);
-      metadata.version = version;
-      metadata.tag = `v${version}`;
+      const newVersion = increase(version, sem, identifier);
+      metadata.version = newVersion;
+      metadata.tag = `v${newVersion}`;
       metadata.prefix = `Prerelease ${identifier} version `;
     }
   });
