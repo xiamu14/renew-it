@@ -30,7 +30,9 @@ function getNewVersion(options, version) {
         );
         process.exit(1);
       }
-      metadata.version = increase(version, sem[0]);
+      const version = increase(version, sem[0]);
+      metadata.version = version;
+      metadata.tag = `v${version}`;
       metadata.prefix = sem[1];
     }
   });
