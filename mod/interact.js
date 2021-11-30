@@ -107,7 +107,7 @@ async function exec() {
         `\nCommit message: ${cyan(`${metadata.prefix}${metadata.version}`)}`
       )
     );
-    process.exit(1);
+    // process.exit(1);
     await execShell(metadata, remote[0], remote[1]);
     console.log("Push", remote.join("/"));
     console.log(`\n${green("[ renew-it ]")} Update Success!\n`);
