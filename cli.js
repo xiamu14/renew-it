@@ -34,11 +34,6 @@ program
     "--prerelease [identifier]",
     "increments version, then makes a prerelease (default: beta)"
   )
-  .option(
-    "-m, --remote [remote]",
-    "remote and branch. format: `upstream/branch`",
-    /^[a-zA-Z0-9_~.-]+\/[a-zA-Z0-9_~.-]+$/
-  )
   .on("--help", () => {
     console.log("\n  Tip:\n");
     console.log(
