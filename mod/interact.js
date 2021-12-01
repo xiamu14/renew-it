@@ -80,7 +80,7 @@ async function exec() {
   const newVersion = semver.inc(version, versionType, prereleaseVersionType);
   const metadata = {
     version: newVersion,
-    tag: `v${version}`,
+    tag: `v${newVersion}`,
     prefix: `chore: `,
   };
   // console.log(`Update ${version} => ${newVersion}`);
