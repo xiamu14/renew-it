@@ -28,6 +28,8 @@ async function exec() {
     process.exit(1);
   }
 
+  console.log(green(`\nCurrent version: ${cyan(`${version}`)}`));
+
   const firstAnswer = await inquirer.prompt([
     {
       type: "confirm",
@@ -36,18 +38,16 @@ async function exec() {
     },
   ]);
 
-  // console.log("debug first", firstAnswer);
-
   const releaseTypes = [
     "[major]主版本(不向下兼容的修改)",
     "[minor]次版本(向下兼容的新增功能)",
     "[patch]修订号(向下兼容的问题修正)",
   ];
   const noReleaseTypes = [
+    "[prerelease]升级先行版本号",
     "[premajor]主版本(不向下兼容的修改)",
     "[preminor]次版本(向下兼容的新增功能)",
     "[prepatch]修订号(向下兼容的问题修正)",
-    "[prerelease]升级先行版本号",
   ];
 
   const prereleaseVersions = [
