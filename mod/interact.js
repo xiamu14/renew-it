@@ -65,6 +65,7 @@ async function exec() {
   });
   const versionType = secondAnswer.type.match(/\[(\w+)\]/)[1];
   let prereleaseVersionType = "";
+  // TODO: 如果选择了 prerelease， 则自动判断当前版本的发行版本号，没有则提供选择
   if (!firstAnswer.isRelease) {
     const thirdAnswer = await inquirer.prompt({
       type: "list",
