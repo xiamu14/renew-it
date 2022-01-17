@@ -1,6 +1,6 @@
 {
   "name": "renew-it",
-  "version": "1.4.10-alpha.1",
+  "version": "1.4.10",
   "description": "auto bump version (use semver), push commit and tag",
   "main": "mod/interact.js",
   "bin": {
@@ -10,7 +10,7 @@
     "mod/*"
   ],
   "scripts": {
-    "dev": "renew-it"
+    "dev": "node mod/interact.js"
   },
   "repository": {
     "type": "git",
