@@ -7,7 +7,7 @@ const args = require("minimist")(process.argv.slice(2));
 const { overwritePackageJson, execShell } = require("./utils");
 const { green, cyan, magenta } = require("chalk");
 
-async function exec() {
+async function exec(options) {
   const packageFile = path.resolve(process.cwd(), "package.json");
 
   let packageFileData;
@@ -103,12 +103,15 @@ async function exec() {
     console.log(
       green(`\nUpdate version: ${cyan(`${version} -> ${metadata.version}`)}`)
     );
+    if (options.skipGit) {
+      console.log(`\n${green("[ renew-it ]")} ${cyan("Update Success!")}\n`);
+      process.exit(1);
+    }
     console.log(
       green(
         `\nCommit message: ${cyan(`${metadata.prefix}${metadata.version}`)}`
       )
     );
-    // process.exit(1);
     await execShell(metadata, remote[0], remote[1]);
     console.log("Push", remote.join("/"));
     console.log(`\n${green("[ renew-it ]")} ${cyan("Update Success!")}\n`);
@@ -123,8 +126,13 @@ if (args["help"] || args["h"]) {
   );
   console.log("\n  Examples:\n");
   console.log(`    ${green("$")} renew-it`);
-  console.log(`    ${green("$")} renew-it --remote upstream/branch`);
+  console.log(`    ${green("$")} renew-it --skip-git`);
   console.log("");
 } else {
-  exec();
+  const options = { skipGit: false };
+  if (args["skip-git"]) {
+    options.skipGit = true;
+  }
+  console.log("debug", options.skipGit);
+  // exec(options);
 }
