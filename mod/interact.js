@@ -105,7 +105,7 @@ async function exec(options) {
     );
     if (options.skipGit) {
       console.log(`\n${green("[ renew-it ]")} ${cyan("Update Success!")}\n`);
-      process.exit(1);
+      process.exit(0);
     }
     console.log(
       green(
@@ -133,6 +133,5 @@ if (args["help"] || args["h"]) {
   if (args["skip-git"]) {
     options.skipGit = true;
   }
-  console.log("debug", options.skipGit);
-  // exec(options);
+  exec(options);
 }
