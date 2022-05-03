@@ -151,7 +151,7 @@ if (args["help"] || args["h"]) {
   console.log("");
 } else {
   const options = { skipGit: false };
-  if (args["skit-git"]) {
+  if (args["skip-git"]) {
     options.skipGit = true;
   }
   exec(options);
