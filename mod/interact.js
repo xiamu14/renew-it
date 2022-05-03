@@ -30,7 +30,7 @@ async function exec(options) {
 
   console.log(green(`\nCurrent version: ${cyan(`${version}`)}`));
 
-  const firstAnswer = await inquirer.prompt([
+  const { isRelease } = await inquirer.prompt([
     {
       type: "confirm",
       name: "isRelease",
@@ -38,54 +38,70 @@ async function exec(options) {
     },
   ]);
 
-  const releaseTypes = [
-    "[major]主版本(不向下兼容的修改)",
-    "[minor]次版本(向下兼容的新增功能)",
-    "[patch]修订号(向下兼容的问题修正)",
-  ];
-  const noReleaseTypes = [
-    "[prerelease]升级先行版本号",
-    "[premajor]主版本(不向下兼容的修改)",
-    "[preminor]次版本(向下兼容的新增功能)",
-    "[prepatch]修订号(向下兼容的问题修正)",
+  const releaseChoices = [
+    "[major]主版本(不兼容的重大更新)",
+    "[minor]次版本(兼容的新增功能)",
+    "[patch]修订号(兼容的问题修正)",
   ];
 
-  const prereleaseVersions = [
-    "[alpha]内部测试版",
-    "[experimental]实验功能",
-    "[beta]测试版，新功能迭代或修复 bug",
-    "[rc]发行候选版本，无新功能迭代，仅修复 bug",
-  ];
+  let newVersion = "";
 
-  const secondAnswer = await inquirer.prompt({
-    type: "list",
-    name: "type",
-    message: "选择版本号?",
-    choices: firstAnswer.isRelease ? releaseTypes : noReleaseTypes,
-  });
-  const versionType = secondAnswer.type.match(/\[(\w+)\]/)[1];
-  let prereleaseVersionType = "";
-  // TODO: 如果选择了 prerelease， 则自动判断当前版本的发行版本号，没有则提供选择
-  if (!firstAnswer.isRelease) {
+  if (isRelease) {
+    const secondAnswer = await inquirer.prompt({
+      type: "list",
+      name: "type",
+      message: "选择版本号?",
+      choices: releaseChoices,
+    });
+    const releaseVersionType = secondAnswer.type.match(/\[(\w+)\]/)[1];
+    newVersion = semver.inc(version, releaseVersionType);
+  } else {
+    const currentPreVersionTmp = version.match(/-([a-z]+)\./);
+
+    const preReleaseType = [
+      "[alpha]内部测试版",
+      "[experimental]实验功能",
+      "[beta]公开测试版：新功能迭代或修复 bug",
+      "[rc]发行候选版本：无新功能迭代，仅修复 bug",
+    ];
+
+    if (currentPreVersionTmp) {
+      preReleaseType.unshift("[number]仅更新先行版本数字(beta.0 -> beta.1)");
+    }
     const thirdAnswer = await inquirer.prompt({
       type: "list",
       name: "type",
       message: "选择先行版本号?",
-      choices: prereleaseVersions,
+      choices: preReleaseType,
     });
-    prereleaseVersionType = thirdAnswer.type.match(/\[(\w+)\]/)[1];
+    const preReleaseVersionType = thirdAnswer.type.match(/\[(\w+)\]/)[1];
+
+    newVersion = semver.inc(
+      version,
+      "prerelease",
+      preReleaseVersionType === "number"
+        ? currentPreVersionTmp[1]
+        : preReleaseVersionType
+    );
   }
 
-  // console.info("Answers:", versionType, prereleaseVersionType);
+  const { isSure } = await inquirer.prompt([
+    {
+      type: "confirm",
+      name: "isSure",
+      message: `确认更新版本: ${version} => ${newVersion} `,
+    },
+  ]);
 
-  const newVersion = semver.inc(version, versionType, prereleaseVersionType);
+  if (!isSure) {
+    process.exit(0);
+  }
+
   const metadata = {
     version: newVersion,
     tag: `v${newVersion}`,
     prefix: `chore: `,
   };
-  // console.log(`Update ${version} => ${newVersion}`);
-
   // 处理 upstream/branch
   let remote = ["origin", "master"];
 
@@ -119,6 +135,7 @@ async function exec(options) {
     throw err;
   }
 }
+
 if (args["help"] || args["h"]) {
   console.log("\n  Tip:\n");
   console.log(
@@ -130,7 +147,7 @@ if (args["help"] || args["h"]) {
   console.log("");
 } else {
   const options = { skipGit: false };
-  if (args["skip-git"]) {
+  if (args["skit-git"]) {
     options.skipGit = true;
   }
   exec(options);
