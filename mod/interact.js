@@ -45,6 +45,7 @@ async function exec(options) {
   ];
 
   let newVersion = "";
+  const currentPreVersionTmp = version.match(/-([a-z]+)\./);
 
   if (isRelease) {
     const secondAnswer = await inquirer.prompt({
@@ -54,10 +55,13 @@ async function exec(options) {
       choices: releaseChoices,
     });
     const releaseVersionType = secondAnswer.type.match(/\[(\w+)\]/)[1];
-    newVersion = semver.inc(version, releaseVersionType);
+    if (currentPreVersionTmp) {
+      const versionTmp = semver.inc(version, `pre${releaseVersionType}`);
+      newVersion = semver.inc(versionTmp, releaseVersionType);
+    } else {
+      newVersion = semver.inc(version, releaseVersionType);
+    }
   } else {
-    const currentPreVersionTmp = version.match(/-([a-z]+)\./);
-
     const preReleaseType = [
       "[alpha]内部测试版",
       "[experimental]实验功能",
