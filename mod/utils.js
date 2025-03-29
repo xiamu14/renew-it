@@ -1,5 +1,6 @@
-const { exec } = require("child_process");
+const { exec, execSync } = require("child_process");
 const fs = require("fs");
+const inquirer = require("inquirer");
 const { green, cyan } = require("chalk");
 
 function overwritePackageJson(
@@ -21,9 +22,27 @@ function overwritePackageJson(
   });
 }
 
-function execShell(metadata, upstream, branch) {
+async function gitExecShell(metadata) {
+  // 获取当前代码git仓库的 upstream 和 branch
+  const upstreams = execSync("git remote")
+    .toString()
+    .replaceAll(" ", "")
+    .split("\n");
+  const branch = execSync("git rev-parse --abbrev-ref HEAD").toString().trim();
+  console.log(upstreams, upstreams.length);
+  let upstream = upstreams.length === 1 ? upstreams[0] : "";
+  if (upstreams.length > 1) {
+    const answer = await inquirer.prompt({
+      type: "list",
+      name: "type",
+      message: "选择远程仓库?",
+      choices: upstreams,
+    });
+    upstream = answer.type.match(/\[(\w+)\]/)[1];
+  }
+
   let shellList = "";
-  if (branch) {
+  if (upstream) {
     shellList = [
       `echo "\n${green("[ 1 / 2 ]")} ${cyan(
         `Commit and push to ${upstream}/${branch}`
@@ -65,5 +84,5 @@ function execShell(metadata, upstream, branch) {
 
 module.exports = {
   overwritePackageJson,
-  execShell,
+  gitExecShell,
 };

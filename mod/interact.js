@@ -4,7 +4,7 @@ const path = require("path");
 const fs = require("fs");
 const semver = require("semver");
 const args = require("minimist")(process.argv.slice(2));
-const { overwritePackageJson, execShell } = require("./utils");
+const { overwritePackageJson, gitExecShell } = require("./utils");
 const { green, cyan, magenta } = require("chalk");
 
 async function exec() {
@@ -105,26 +105,6 @@ async function exec() {
     tag: `v${newVersion}`,
     prefix: `chore: `,
   };
-  // 获取当前 git 仓库的 upstream 分支
-  const gitHeadFile = path.resolve(process.cwd(), ".git/HEAD");
-  let upstreamBranch = "master";
-
-  try {
-    const headContent = fs.readFileSync(gitHeadFile, "utf8").trim();
-    if (headContent.startsWith("ref:")) {
-      const branchPath = headContent.split(" ")[1];
-      upstreamBranch = branchPath.split("/").slice(2).join("/");
-    } else {
-      console.error(magenta("Failed to read the current git branch."));
-      upstreamBranch = "";
-    }
-  } catch (err) {
-    console.error(magenta("Failed to read the current git branch."));
-    upstreamBranch = "";
-  }
-
-  console.log(green(`\nCurrent upstream branch: ${cyan(upstreamBranch)}`));
-  const remote = ["origin", upstreamBranch];
 
   try {
     await overwritePackageJson(
@@ -141,7 +121,7 @@ async function exec() {
         `\nCommit message: ${cyan(`${metadata.prefix}${metadata.version}`)}`
       )
     );
-    await execShell(metadata, remote[0], remote[1]);
+    await gitExecShell(metadata);
     console.log("Push", remote.join("/"));
     console.log(`\n${green("[ renew-it ]")} ${cyan("Update Success!")}\n`);
   } catch (err) {
