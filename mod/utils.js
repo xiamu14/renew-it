@@ -74,7 +74,7 @@ async function gitExecShell(metadata) {
         if (err) {
           throw err;
         } else {
-          resolve();
+          resolve([upstream, branch]);
         }
       }
     );

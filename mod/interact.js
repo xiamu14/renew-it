@@ -121,8 +121,8 @@ async function exec() {
         `\nCommit message: ${cyan(`${metadata.prefix}${metadata.version}`)}`
       )
     );
-    await gitExecShell(metadata);
-    console.log("Push", remote.join("/"));
+    const remote = await gitExecShell(metadata);
+    remote[0] !== "" && console.log("Push", remote.join("/"));
     console.log(`\n${green("[ renew-it ]")} ${cyan("Update Success!")}\n`);
   } catch (err) {
     console.error(err);
