@@ -1,6 +1,6 @@
 const { exec } = require("child_process");
 const fs = require("fs");
-const { green, red, cyan } = require("chalk");
+const { green, cyan } = require("chalk");
 
 function overwritePackageJson(
   packageFile,
@@ -22,19 +22,29 @@ function overwritePackageJson(
 }
 
 function execShell(metadata, upstream, branch) {
-  const shellList = [
-    `echo "\n${green("[ 1 / 2 ]")} ${cyan(
-      `Commit and push to ${upstream}/${branch}`
-    )}\n"`,
-    "git add .",
-    `git commit -m "${metadata.prefix}${metadata.version}"`,
-    `git push ${upstream} ${branch}`,
-    `echo "\n${green("[ 2 / 2 ]")} ${cyan(
-      `Tag and push tag to ${upstream}`
-    )}\n"`,
-    `git tag ${metadata.tag}`,
-    `git push ${upstream} ${metadata.tag}`,
-  ].join(" && ");
+  let shellList = "";
+  if (branch) {
+    shellList = [
+      `echo "\n${green("[ 1 / 2 ]")} ${cyan(
+        `Commit and push to ${upstream}/${branch}`
+      )}\n"`,
+      "git add .",
+      `git commit -m "${metadata.prefix}${metadata.version}"`,
+      `git push ${upstream} ${branch}`,
+      `echo "\n${green("[ 2 / 2 ]")} ${cyan(
+        `Tag and push tag to ${upstream}`
+      )}\n"`,
+      `git tag ${metadata.tag}`,
+      `git push ${upstream} ${metadata.tag}`,
+    ].join(" && ");
+  } else {
+    shellList = [
+      `echo "\n${green("[ 1 / 2 ]")} ${cyan(`Commit and Tag`)}\n"`,
+      "git add .",
+      `git commit -m "${metadata.prefix}${metadata.version}"`,
+      `git tag ${metadata.tag}`,
+    ].join(" && ");
+  }
 
   return new Promise((resolve) => {
     const childExec = exec(

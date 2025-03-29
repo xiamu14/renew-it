@@ -7,7 +7,7 @@ const args = require("minimist")(process.argv.slice(2));
 const { overwritePackageJson, execShell } = require("./utils");
 const { green, cyan, magenta } = require("chalk");
 
-async function exec(options) {
+async function exec() {
   const packageFile = path.resolve(process.cwd(), "package.json");
 
   let packageFileData;
@@ -17,9 +17,8 @@ async function exec(options) {
     packageFileData = fs.readFileSync(packageFile, "utf8");
     version = JSON.parse(packageFileData).version;
   } catch (err) {
-    console.error(err);
+    console.log("Can not parse package.json in current work directory!");
     process.exit(1);
-    // throw new Error("Can not find package.json in current work directory!");
   }
 
   // NOTE: 检验当前版本号是否合法
@@ -106,15 +105,29 @@ async function exec(options) {
     tag: `v${newVersion}`,
     prefix: `chore: `,
   };
-  // 处理 upstream/branch
-  let remote = ["origin", "master"];
-
-  if (args["remote"]) {
-    remote = args["remote"].split("/");
-  }
+  // 获取当前 git 仓库的 upstream 分支
+  const gitHeadFile = path.resolve(process.cwd(), ".git/HEAD");
+  let upstreamBranch = "master";
 
   try {
-    const msg = await overwritePackageJson(
+    const headContent = fs.readFileSync(gitHeadFile, "utf8").trim();
+    if (headContent.startsWith("ref:")) {
+      const branchPath = headContent.split(" ")[1];
+      upstreamBranch = branchPath.split("/").slice(2).join("/");
+    } else {
+      console.error(magenta("Failed to read the current git branch."));
+      upstreamBranch = "";
+    }
+  } catch (err) {
+    console.error(magenta("Failed to read the current git branch."));
+    upstreamBranch = "";
+  }
+
+  console.log(green(`\nCurrent upstream branch: ${cyan(upstreamBranch)}`));
+  const remote = ["origin", upstreamBranch];
+
+  try {
+    await overwritePackageJson(
       packageFile,
       packageFileData,
       version,
@@ -123,10 +136,6 @@ async function exec(options) {
     console.log(
       green(`\nUpdate version: ${cyan(`${version} -> ${metadata.version}`)}`)
     );
-    if (options.skipGit) {
-      console.log(`\n${green("[ renew-it ]")} ${cyan("Update Success!")}\n`);
-      process.exit(0);
-    }
     console.log(
       green(
         `\nCommit message: ${cyan(`${metadata.prefix}${metadata.version}`)}`
@@ -136,7 +145,7 @@ async function exec(options) {
     console.log("Push", remote.join("/"));
     console.log(`\n${green("[ renew-it ]")} ${cyan("Update Success!")}\n`);
   } catch (err) {
-    throw err;
+    console.error(err);
   }
 }
 
@@ -147,12 +156,7 @@ if (args["help"] || args["h"]) {
   );
   console.log("\n  Examples:\n");
   console.log(`    ${green("$")} renew-it`);
-  console.log(`    ${green("$")} renew-it --skip-git`);
   console.log("");
 } else {
-  const options = { skipGit: false };
-  if (args["skip-git"]) {
-    options.skipGit = true;
-  }
-  exec(options);
+  exec();
 }
