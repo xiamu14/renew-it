@@ -4,6 +4,12 @@
 
 renew-it 根据 ([SemVer 规范](https://semver.org/)) 自动生成新版本号, 然后生成 commit message，打 tag，推送到 GitHub 后，由 github action push 到 npm 或 yarn 等。适用于多账号，多库同步的项目需求。
 
+## update
+
+### Changelog
+
+- **Fix**: Resolved an issue where the absence of a Git origin caused the script to skip Git execution commands automatically.
+
 ## LICENSE
 
 [MIT](./LICENSE) © PengJiyuan
