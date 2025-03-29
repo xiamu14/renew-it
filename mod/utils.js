@@ -27,9 +27,10 @@ async function gitExecShell(metadata) {
   const upstreams = execSync("git remote")
     .toString()
     .replaceAll(" ", "")
-    .split("\n");
+    .split("\n")
+    .filter((item) => item);
   const branch = execSync("git rev-parse --abbrev-ref HEAD").toString().trim();
-  console.log(execSync("git remote").toString());
+
   let upstream = upstreams.length === 1 ? upstreams[0] : "";
   if (upstreams.length > 1) {
     const answer = await inquirer.prompt({
