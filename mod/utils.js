@@ -39,7 +39,7 @@ async function gitExecShell(metadata) {
       message: "选择远程仓库?",
       choices: upstreams,
     });
-    upstream = answer.type.match(/\[(\w+)\]/)[1];
+    upstream = answer.type;
   }
 
   let shellList = "";
